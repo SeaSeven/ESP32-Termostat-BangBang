@@ -1,0 +1,42 @@
+Escriu un programa per a ESP32-S3 que implementi un termostat Bang-Bang per controlar una resistència calefactora.
+
+HARDWARE:
+- Sensor de temperatura: DS18B20 (OneWire) al GPIO 16
+- Resistència calefactora: controlada per PWM al GPIO 17
+
+REQUISITS:
+
+Control Bang-Bang:
+- Setpoint: 50°C (Temperatura de Consigna fixe)
+- Histèresi: ±0.3°C
+  - Si T < 49.7°C → 100% PWM (encendre)
+  - Si T > 50.3°C → 0% PWM (apagar)
+  - Entre 49.7°C i 50.3°C → mantenir estat
+
+PWM:
+- Resolució: 10 bits (valors 0-1023)
+- Freüència: 5 kHz
+- Funcions: analogWriteResolution(), analogWriteFrequency(), analogWrite()
+
+Sensor DS18B20:
+- Resolució: 11 bits (precisió 0.125°C)
+- Llibreries: OneWire + DallasTemperature
+
+Seguretat:
+- Temperatura màxima: 60°C
+- Acció: Si T > 60°C → PWM = 0 (atura immediata)
+
+Output Serial:
+- Format: Web Serial Plotter
+- Dades: Treal,Tconsigna (Treal amb 2 decimals)
+
+Estructura:
+- Utilitzar Tasker per tasques no bloquejants
+- 3 tasques: lectura sensor, control, enviament serial
+- NO utilitzar operador ternari (? :)
+- SÍ utilitzar estructures if-else
+
+Tasques planificades (amb Tasker):
+- llegirTemperatura(): cada 300ms
+- controlTermostat(): cada 100ms
+- enviarSerial(): cada 100ms
