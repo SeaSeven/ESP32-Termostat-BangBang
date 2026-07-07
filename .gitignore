@@ -5,3 +5,4 @@ build/
 *.a
 *.elf
 .DS_Store
+control_pid/
